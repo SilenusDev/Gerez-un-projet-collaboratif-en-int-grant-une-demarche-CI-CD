@@ -20,8 +20,8 @@ jobs:
     
     - name: Build and test with Maven
       run: mvn -B package --file pom.xml
-      working-directory: backend
-      
+      working-directory: back
+
   test-frontend:
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +35,7 @@ jobs:
       working-directory: frontend
     - name: Run tests
       run: npm test
-      working-directory: frontend
+      working-directory: front
     - name: Upload coverage report
       uses: actions/upload-artifact@v3
       with:
