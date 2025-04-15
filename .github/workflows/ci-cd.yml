@@ -27,23 +27,49 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Debug project structure
+      
+        run: |
+          echo "Structure du projet :"
+          ls -R
+          echo "Contenu du dossier front :"
+          ls -la front/
+      
       - name: Setup Node.js for Angular 14
         uses: actions/setup-node@v4
         with:
           node-version: '16.20.2'
           cache: 'npm'
-          
+          cache-dependency-path: 'front/package-lock.json'
+      
       - name: Install dependencies
-        run: npm ci
-        working-directory: front  # Changé de frontend à front
-        
+        run: npm ci --no-audit
+        working-directory: front
+        env:
+          CI: true  # Force le mode CI pour npm
+      
+      - name: Verify Angular installation
+        run: npx ng version
+        working-directory: front
+      
       - name: Run Angular tests with coverage
         run: |
-          npm run test -- --no-watch --code-coverage --browsers=ChromeHeadless
-        working-directory: front  # Changé ici aussi
-        
+          npm run test -- \
+            --no-watch \
+            --code-coverage \
+            --browsers=ChromeHeadless \
+            --progress=false
+        working-directory: front
+      
+      - name: Verify coverage report exists
+        run: |
+          echo "Contenu du dossier coverage :"
+          ls -la coverage/
+        working-directory: front
+      
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
-          name: front-coverage  # Nom modifié pour cohérence
-          path: front/coverage/  # Chemin corrigé
+          name: front-coverage
+          path: front/coverage/
+          retention-days: 5
