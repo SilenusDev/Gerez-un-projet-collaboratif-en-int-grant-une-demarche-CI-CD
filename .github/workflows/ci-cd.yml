@@ -77,15 +77,15 @@ jobs:
         run: |
           echo "Contenu du dossier coverage :"
           ls -la coverage/
-          echo "Contenu du dossier lcov-report :"
-          ls -la coverage/lcov-report/
+          echo "Contenu du dossier bobapp :"
+          ls -la coverage/bobapp/
         working-directory: front
-      
+
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: front-coverage
-          path: front/coverage/lcov-report/
+          path: front/coverage/bobapp/
           retention-days: 5
 
   deploy-coverage:
