@@ -36,7 +36,8 @@ module.exports = function (config) {
       reporters: [
         { type: 'html' },         // Conservé - pour visualisation locale
         { type: 'text-summary' }, // Conservé - pour sortie console
-        { type: 'lcovonly' }      // AJOUT - pour intégration CI/CD
+        // { type: 'lcovonly' }      // AJOUT - pour intégration CI/CD
+        { type: 'lcov' }      // AJOUT - pour intégration CI/CD
       ]
     },
 
