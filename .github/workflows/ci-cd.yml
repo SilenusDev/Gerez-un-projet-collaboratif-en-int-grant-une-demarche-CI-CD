@@ -25,19 +25,25 @@ jobs:
   test-frontend:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16.x'
-    - name: Install dependencies
-      run: npm install
-      working-directory: frontend
-    - name: Run tests
-      run: npm test
-      working-directory: front
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v3
-      with:
-        name: frontend-coverage
-        path: frontend/coverage/
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js for Angular 14
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16.20.2'  # Version compatible avec Angular 14
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci  # Plus fiable que npm install pour les CI
+        working-directory: frontend
+        
+      - name: Run Angular tests with coverage
+        run: |
+          npm run test -- --no-watch --code-coverage --browsers=ChromeHeadless
+        working-directory: frontend
+        
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: frontend/coverage/
