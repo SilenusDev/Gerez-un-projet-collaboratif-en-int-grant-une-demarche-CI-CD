@@ -144,9 +144,62 @@ jobs:
           </body>
           </html>" > public/index.html
 
-      - name: SonarCloud Scan (Frontend)
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          projectBaseDir: front
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_BOBAPP }}
+      # - name: SonarCloud Scan (Frontend)
+      #   uses: SonarSource/sonarcloud-github-action@v2
+      #   with:
+      #     projectBaseDir: front
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_BOBAPP }}
+
+  # deploy-coverage:
+  #   needs: [test-backend, test-frontend]
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     # ✅ Cloner ton repo (code source nécessaire pour SonarCloud)
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     # ✅ Télécharger les rapports de couverture
+  #     - name: Download artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         path: artifacts
+
+  #     # ✅ Préparer la page HTML pour afficher les rapports
+  #     - name: Prepare coverage site
+  #       run: |
+  #         mkdir -p public
+  #         mv artifacts/backend-coverage public/backend
+  #         mv artifacts/front-coverage public/front
+
+  #         echo "<!DOCTYPE html>
+  #         <html>
+  #         <head>
+  #             <title>Coverage Reports</title>
+  #             <style>
+  #                 body { font-family: Arial; margin: 40px; }
+  #                 a { background: #0366d6; color: white; padding: 10px; border-radius: 4px; text-decoration: none; }
+  #             </style>
+  #         </head>
+  #         <body>
+  #             <h1>Coverage Reports</h1>
+  #             <ul>
+  #                 <li><a href='backend/index.html'>Backend Report (Jacoco)</a></li>
+  #                 <li><a href='front/index.html'>Frontend Report (LCOV)</a></li>
+  #             </ul>
+  #             <p>Generated on: $(date)</p>
+  #         </body>
+  #         </html>" > public/index.html
+
+  #     # ✅ Scanner SonarCloud du frontend (Angular)
+  #     - name: SonarCloud Scan (Frontend)
+  #       uses: SonarSource/sonarcloud-github-action@v2
+  #       with:
+  #         projectBaseDir: front
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_BOBAPP }}
+
+
+
+
