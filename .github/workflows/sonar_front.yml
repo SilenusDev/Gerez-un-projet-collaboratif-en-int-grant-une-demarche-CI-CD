@@ -1,0 +1,56 @@
+name: SonarCloud Frontend Analysis
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'front/**'  # Ne s'exécute que lorsque des fichiers dans le dossier 'front' sont modifiés
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'front/**'
+  workflow_dispatch:  # Permet de lancer l'analyse manuellement
+
+jobs:
+  sonarcloud-frontend:
+    name: SonarCloud Frontend
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Important pour SonarCloud pour voir l'historique des commits
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: './front/package-lock.json'
+      
+      - name: Install dependencies
+        working-directory: ./front
+        run: npm ci
+      
+      - name: Run tests with coverage
+        working-directory: ./front
+        run: npm test -- --no-watch --code-coverage
+        continue-on-error: true  # Permet de continuer même si les tests échouent
+      
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_BOBAPP }}
+        with:
+          projectBaseDir: front
+          args: >
+            -Dsonar.projectKey=silenusdev_bobapp-front
+            -Dsonar.organization=silenusdev
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.sources=src
+            -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts,**/*.test.ts
+            -Dsonar.tests=src
+            -Dsonar.test.inclusions=**/*.spec.ts,**/*.test.ts
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info

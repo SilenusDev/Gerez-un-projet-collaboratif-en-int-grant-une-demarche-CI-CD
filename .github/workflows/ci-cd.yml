@@ -34,6 +34,13 @@ jobs:
         name: backend-coverage
         path: back/target/site/jacoco/
         retention-days: 5
+    
+    - name: SonarCloud Scan (Backend)
+      uses: SonarSource/sonarcloud-github-action@v2
+      with:
+        projectBaseDir: back
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_BOBAPP }}
 
   test-frontend:
     runs-on: ubuntu-latest
@@ -136,3 +143,10 @@ jobs:
               <p>Generated on: $(date)</p>
           </body>
           </html>" > public/index.html
+
+      - name: SonarCloud Scan (Frontend)
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: front
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_BOBAPP }}
