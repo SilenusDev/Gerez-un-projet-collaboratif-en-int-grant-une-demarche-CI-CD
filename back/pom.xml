@@ -59,7 +59,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
+				<version>0.8.10</version>
 				<executions>
 					<execution>
 						<id>prepare-agent</id>
@@ -69,16 +69,14 @@
 					</execution>
 					<execution>
 						<id>report</id>
-						<phase>test</phase>
+						<phase>verify</phase> <!-- important: après les tests -->
 						<goals>
 							<goal>report</goal>
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<outputDirectory>${project.build.directory}/site/jacoco</outputDirectory>
-				</configuration>
 			</plugin>
+
 			
 			<!-- Ajout du plugin SonarQube -->
 			<plugin>
